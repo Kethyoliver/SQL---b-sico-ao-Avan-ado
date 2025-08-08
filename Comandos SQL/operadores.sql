@@ -1,0 +1,229 @@
+-- PARA QUE SERVE ##################################################################
+-- Servem para executar operações matemáticas
+-- Muito utilizados para criar colunas calculadas
+
+
+-- TIPOS ###########################################################################
+-- +
+-- -
+-- *
+-- /
+-- ^
+-- %
+-- || --> não é um operador aritmético
+
+
+-- EXEMPLOS ########################################################################
+
+-- (Exemplo 1) Criação de coluna calculada
+-- Crie uma coluna contendo a idade do cliente da tabela sales.customers
+select * from sales.customers limit 10
+
+select  email, 
+		birth_date,
+		(current_date - birth_date) / 365 as idade_do_cliente
+from sales.customers
+
+select  email, 
+		birth_date,
+		(current_date - birth_date) / 365 as "idade do cliente"
+from sales.customers
+
+-- (Exemplo 2) Utilização da coluna calculada nas queries
+-- Liste os 10 clientes mais novos da tabela customers
+select  email, 
+		birth_date,
+		(current_date - birth_date) / 365 as "idade do cliente"
+from sales.customers
+order by "idade do cliente"
+
+-- (Exemplo 3) Criação de coluna calculada com strings 
+-- Crie a coluna "nome_completo" contendo o nome completo do cliente
+
+select 
+	first_name || ' ' || last_name as nome_completo
+from sales.customers
+
+-- RESUMO ##########################################################################
+-- (1) Servem para executar operações matemáticas
+-- (2) Muito utilizado para criar colunas calculadas
+-- (3) Alias (pseudônimos) são muito utilizados para dar nome as colunas calculadas.
+-- (4) Para criar pseudônimos que contém espaços no nome são utilizadas aspas duplas
+-- (5) No caso de strings o operador de adição (||) irá concatenar as strings
+-- (6) Utilize o Guia de comandos para consultar os operadores utilizados no SQL
+
+
+
+--#############################################################################################################
+
+-- PARA QUE SERVE ##################################################################
+-- Servem para comparar dois valores retornando TRUE ou FALSE
+-- Muito utilizado em conjunto com a função WHERE para filtrar linhas de uma seleção
+
+
+-- TIPOS ###########################################################################
+-- =
+-- >
+-- <
+-- >=
+-- <=
+-- <>
+
+
+-- EXEMPLOS ########################################################################
+
+-- (Exemplo 1) Uso de operadores como flag
+-- Crie uma coluna que retorne TRUE sempre que um cliente for um profissional clt 
+select
+    customer_id,
+    first_name,
+    professional_status,
+	(professional_status='clt') as cliente_clt
+from sales.customers
+
+
+-- RESUMO ##########################################################################
+-- (1) Servem para comparar dois valores retornando TRUE ou FALSE
+-- (2) Muito utilizado em conjunto com a função WHERE para filtrar linhas de uma 
+-- seleção
+-- (3) Utilizados para criar colunas Flag que retornem TRUE ou FALSE
+-- (4) Utilize o Guia de comandos para consultar os operadores utilizados no SQL
+
+--#####################################################################################################
+
+-- PARA QUE SERVE ##################################################################
+-- Usados para unir expressões simples em uma composta
+
+-- TIPOS ###########################################################################
+-- AND
+-- OR
+-- NOT
+-- BETWEEN
+-- IN
+-- LIKE
+-- ILIKE
+-- IS NULL
+
+
+-- EXEMPLOS ########################################################################
+
+-- (Exemplo 1) Uso do comando BETWEEN 
+-- Selecione veículos que custam entre 100k e 200k na tabela products
+select *
+from sales.products
+where price >= 100000 and price <= 200000
+
+select *
+from sales.products
+where price between 100000 and 200000
+
+-- (Exemplo 2)  Uso do comando NOT
+-- Selecione veículos que custam abaixo de 100k ou acima 200k 
+select *
+from sales.products
+where price < 100000 or price > 200000
+
+select *
+from sales.products
+where price not between  100000 and 200000
+
+
+-- (Exemplo 3) Uso do comando IN
+-- Selecionar produtos que sejam da marca HONDA, TOYOTA ou RENAULT
+select *
+from sales.products
+where brand = 'HONDA' or brand = 'TOYOTA' or brand = 'RENAULT'
+
+select *
+from sales.products
+where brand in ('HONDA', 'TOYOTA', 'RENAULT')
+
+select *
+from sales.products
+where brand NOT in ('HONDA', 'TOYOTA', 'RENAULT')
+
+
+-- (Exemplo 4) Uso do comando LIKE (matchs imperfeitos)
+-- Selecione os primeiros nomes distintos da tabela customers que começam
+-- com as iniciais ANA
+
+select distinct first_name
+from sales.customers
+where first_name = 'ANA'
+
+select distinct first_name
+from sales.customers
+where first_name like '%ANA' --posição do % indica onde será encontrado a palavra selecionada
+
+-- (Exemplo 5) Uso do comando ILIKE (ignora letras maiúsculas e minúsculas)
+-- Selecione os primeiros nomes distintos com iniciais 'ana'
+select distinct first_name
+from sales.customers
+where first_name like 'ana%'
+
+select distinct first_name
+from sales.customers
+where first_name ilike 'ana%'
+
+-- (Exemplo 6) Uso do comando IS NULL
+-- Selecionar apenas as linhas que contém nulo no campo "population" na tabela
+-- temp_tables.regions
+select *
+from temp_tables.regions
+where population = null
+
+select *
+from temp_tables.regions
+where population is null
+
+-- RESUMO ##########################################################################
+-- (1) Usados para unir expressões simples em uma composta
+-- (2) AND: Verifica se duas comparações são simultaneamente verdadeiras
+-- (3) OR: Verifica se uma ou outra comparação é verdadeiras
+-- (4) BETWEEN: Verifica quais valores estão dentro do range definido
+-- (5) IN: Funciona como multiplos ORs
+-- (6) LIKE e ILIKE: Comparam textos e são sempre utilizados em conjunto com o 
+-- operador %, que funciona como um coringa, indicando que qualquer texto pode 
+-- aparecer no lugar do campo
+-- (7) ILIKE ignora se o campo tem letras maiúsculas ou minúsculas na comparação
+-- (8) IS NULL: Verifica se o campo é nulo
+-- (9) Utilize o Guia de comandos para consultar os operadores utilizados no SQL
+
+-- EXERCÍCIOS ######################################################################
+
+-- (Exercício 1) Calcule quantos salários mínimos ganha cada cliente da tabela 
+-- sales.customers. Selecione as colunas de: email, income e a coluna calculada "salários mínimos"
+-- Considere o salário mínimo igual à R$1200
+
+select  email, 
+		birth_date,
+		(current_date - birth_date) 
+from sales.customers
+
+-- (Exercício 2) Na query anterior acrescente uma coluna informando TRUE se o cliente
+-- ganha acima de 5 salários mínimos e FALSE se ganha 4 salários ou menos.
+-- Chame a nova coluna de "acima de 4 salários"
+
+
+
+-- (Exercício 3) Na query anterior filtre apenas os clientes que ganham entre
+-- 4 e 5 salários mínimos. Utilize o comando BETWEEN
+
+
+
+-- (Exercício 4) Selecine o email, cidade e estado dos clientes que moram no estado de 
+-- Minas Gerais e Mato Grosso. 
+
+
+
+-- (Exercício 5) Selecine o email, cidade e estado dos clientes que não 
+-- moram no estado de São Paulo.
+
+
+
+-- (Exercício 6) Selecine os nomes das cidade que começam com a letra Z.
+-- Dados da tabela temp_table.regions
+
+
+
+
