@@ -34,6 +34,3 @@ Este projeto é um estudo prático baseado no curso **SQL para Análise de Dados
 ![Dashboard Analise_de_perfil_dos_leads](./img/projeto.1.png)
 ![Dashboard Acompanhamento_de_vendas](./img/projeto.2.png)
 
-## Sobre o Curso
-
-Este projeto foi inspirado no curso SQL para Análise de Dados, que oferece uma base sólida para quem deseja aprender SQL e aplicar em projetos reais de análise de dados.
